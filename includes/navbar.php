@@ -1,3 +1,4 @@
+<!-- hiển thị navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
         <a class="navbar-brand" href="index.php">
@@ -19,15 +20,17 @@
                     </a>
                 </li>
             </ul>
+            <!-- hiển thị tìm kiếm -->
             <form class="d-flex me-3" action="products.php" method="GET">
                 <div class="input-group">
-                    <input class="form-control" type="search" name="search" placeholder="Tìm kiếm..." 
-                           aria-label="Search">
+                    <input class="form-control" type="search" name="search" placeholder="Tìm kiếm..."
+                        aria-label="Search">
                     <button class="btn btn-light" type="submit">
                         <i class="bi bi-search"></i>
                     </button>
                 </div>
             </form>
+            <!-- hiển thị giỏ hàng -->
             <a href="cart.php" class="btn btn-outline-light position-relative">
                 <i class="bi bi-cart3"></i> Giỏ hàng
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -36,4 +39,4 @@
             </a>
         </div>
     </div>
-</nav> 
+</nav>
