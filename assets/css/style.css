@@ -1,0 +1,302 @@
+:root {
+    --primary: #6b9090;
+    --secondary: #a2c3b2;
+    --light: #cce3de;
+    --lighter: #eaf4f4;
+    --lightest: #f6fff8;
+}
+
+body {
+    background-color: var(--lightest);
+}
+
+/* Navbar styling */
+.navbar {
+    background-color: var(--primary) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: var(--lightest);
+    transition: color 0.3s ease;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: var(--light);
+}
+
+/* Card styling */
+.card {
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: white;
+    height: 100%;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.card-img-top {
+    height: 300px;
+    width: 100%;
+    object-fit: contain;
+    padding: 1rem;
+    background-color: #fff;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.card-body {
+    padding: 1.25rem;
+    background-color: #fff;
+}
+
+.card-title {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    height: 2.4rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: #5a7c7c;
+    border-color: #5a7c7c;
+}
+
+.btn-success {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+}
+
+.btn-success:hover {
+    background-color: #8bab9a;
+    border-color: #8bab9a;
+}
+
+/* Product price styling */
+.price-tag {
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.sale-price {
+    color: #dc3545;
+}
+
+/* Category sidebar */
+.list-group-item {
+    border-color: var(--lighter);
+    transition: background-color 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: var(--lighter);
+}
+
+.list-group-item.active {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Cart table */
+.table {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table thead {
+    background-color: var(--lighter);
+}
+
+/* Form controls */
+.form-control:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 0.2rem rgba(162, 195, 178, 0.25);
+}
+
+/* Product detail page */
+.product-image {
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Breadcrumb styling */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0.75rem 0;
+}
+
+.breadcrumb-item a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: var(--secondary);
+}
+
+/* Animation classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Footer styling */
+footer {
+    background-color: var(--primary) !important;
+    color: var(--lightest) !important;
+    margin-top: 3rem !important;
+}
+
+/* Responsive images in cart */
+.cart-product-image {
+    max-width: 100px;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Loading spinner */
+.spinner-border {
+    color: var(--primary);
+}
+
+/* Sticky footer styling */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--lightest);
+}
+
+.container {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+    background-color: var(--primary) !important;
+    color: var(--lightest) !important;
+    padding: 2rem 0;
+    margin-top: auto !important;
+}
+
+/* Styling cho ảnh sản phẩm ở trang chủ */
+.product-gallery {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.product-gallery .product-image {
+    width: 100%;
+    height: 500px;
+    object-fit: contain;
+    background-color: white;
+}
+
+/* Styling cho thông tin sản phẩm */
+.product-details {
+    height: 100%;
+}
+
+.product-details .card-title {
+    font-size: 1.5rem;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+/* Styling cho badge giảm giá */
+.sale-badge {
+    display: inline-block;
+    background-color: var(--primary);
+    color: white;
+    padding: 0.25rem 1rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+}
+
+/* Styling cho giá */
+.price-wrapper {
+    margin: 1rem 0;
+}
+
+.price-wrapper .text-decoration-line-through {
+    color: #6c757d;
+    margin-right: 1rem;
+}
+
+/* Styling cho sản phẩm liên quan */
+.related-products .card {
+    margin-bottom: 1rem;
+}
+
+.related-products .card-img-top {
+    height: 200px;
+}
+
+/* Styling cho nút tăng giảm số lượng */
+.input-group .btn-outline-secondary {
+    border-color: #ced4da;
+}
+
+.input-group .form-control {
+    border-left: none;
+    border-right: none;
+}
+
+.input-group .btn-outline-secondary:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Hiệu ứng hover cho ảnh */
+.product-image {
+    transition: transform 0.3s ease;
+}
+
+.product-image:hover {
+    transform: scale(1.02);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card-img-top {
+        height: 200px;
+    }
+    
+    .product-gallery .product-image {
+        height: 300px;
+    }
+    
+    .product-details {
+        margin-top: 1rem;
+    }
+} 
