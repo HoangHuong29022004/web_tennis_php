@@ -5,9 +5,10 @@ require_once 'config/database.php';
 // Truy vấn 8 sản phẩm mới nhất dựa vào thời gian tạo (created_at)
 // ORDER BY created_at DESC: sắp xếp theo thời gian tạo mới nhất
 // LIMIT 8: chỉ lấy 8 sản phẩm
-$stmt = $conn->prepare("SELECT * FROM products ORDER BY created_at DESC LIMIT 8");
-$stmt->execute();
-$latest_products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = mysqli_prepare($conn, "SELECT * FROM products ORDER BY created_at DESC LIMIT 8");
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$latest_products = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 // Include các file header và navigation bar
 include 'includes/header.php';  // Chứa các thẻ meta, CSS, JS và phần đầu HTML

@@ -5,12 +5,14 @@ require_once 'config/database.php';
 $product_id = isset($_GET['id']) ? $_GET['id'] : 0;
 
 // Lấy thông tin sản phẩm và tên danh mục thông qua JOIN
-$stmt = $conn->prepare("SELECT p.*, c.name as category_name 
-                       FROM products p 
-                       LEFT JOIN categories c ON p.category_id = c.id 
-                       WHERE p.id = ?");
-$stmt->execute([$product_id]);
-$product = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt = mysqli_prepare($conn, "SELECT p.*, c.name as category_name 
+                             FROM products p 
+                             LEFT JOIN categories c ON p.category_id = c.id 
+                             WHERE p.id = ?");
+mysqli_stmt_bind_param($stmt, "i", $product_id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$product = mysqli_fetch_assoc($result);
 
 // Nếu không tìm thấy sản phẩm, chuyển hướng về trang sản phẩm
 if (!$product) {
@@ -19,11 +21,13 @@ if (!$product) {
 }
 
 // Lấy 4 sản phẩm liên quan cùng danh mục, ngoại trừ sản phẩm hiện tại
-$stmt = $conn->prepare("SELECT * FROM products 
-                       WHERE category_id = ? AND id != ? 
-                       LIMIT 4");
-$stmt->execute([$product['category_id'], $product_id]);
-$related_products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = mysqli_prepare($conn, "SELECT * FROM products 
+                             WHERE category_id = ? AND id != ? 
+                             LIMIT 4");
+mysqli_stmt_bind_param($stmt, "ii", $product['category_id'], $product_id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$related_products = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 include 'includes/header.php';
 include 'includes/navbar.php';

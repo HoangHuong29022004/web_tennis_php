@@ -8,9 +8,11 @@ $product_id = $data['product_id'] ?? 0;
 $quantity = $data['quantity'] ?? 1;
 
 // Kiểm tra sản phẩm tồn tại
-$stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
-$stmt->execute([$product_id]);
-$product = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt = mysqli_prepare($conn, "SELECT * FROM products WHERE id = ?");
+mysqli_stmt_bind_param($stmt, "i", $product_id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$product = mysqli_fetch_assoc($result);
 
 if ($product) {
     // Thêm vào session giỏ hàng

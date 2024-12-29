@@ -6,32 +6,39 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';        // Từ khóa t�
 $category_id = isset($_GET['category']) ? $_GET['category'] : ''; // ID danh mục cần lọc
 
 // Lấy danh sách danh mục để hiển thị sidebar
-$stmt = $conn->prepare("SELECT * FROM categories");
-$stmt->execute();
-$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = mysqli_prepare($conn, "SELECT * FROM categories");
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 // Query lấy sản phẩm với JOIN để lấy thêm tên danh mục
 $query = "SELECT p.*, c.name as category_name 
           FROM products p 
           LEFT JOIN categories c ON p.category_id = c.id 
           WHERE 1=1";
-$params = [];
 
-// Thêm điều kiện tìm kiếm theo tên sản phẩm nếu có
 if ($search) {
     $query .= " AND p.name LIKE ?";
-    $params[] = "%$search%";
+    $search_param = "%$search%";
 }
 
-// Thêm điều kiện lọc theo danh mục nếu có
 if ($category_id) {
     $query .= " AND p.category_id = ?";
-    $params[] = $category_id;
 }
 
-$stmt = $conn->prepare($query);
-$stmt->execute($params);
-$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = mysqli_prepare($conn, $query);
+
+if ($search && $category_id) {
+    mysqli_stmt_bind_param($stmt, "si", $search_param, $category_id);
+} elseif ($search) {
+    mysqli_stmt_bind_param($stmt, "s", $search_param);
+} elseif ($category_id) {
+    mysqli_stmt_bind_param($stmt, "i", $category_id);
+}
+
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$products = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 include 'includes/header.php';
 include 'includes/navbar.php';

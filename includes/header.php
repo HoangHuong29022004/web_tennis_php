@@ -12,4 +12,3 @@
 
 <body>
     </rewritten_file>
-    ```

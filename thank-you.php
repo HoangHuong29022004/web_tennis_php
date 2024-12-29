@@ -5,14 +5,16 @@ require_once 'config/database.php';
 $order_id = $_GET['order_id'] ?? 0;
 
 // Lấy thông tin đơn hàng
-$stmt = $conn->prepare("
+$stmt = mysqli_prepare($conn, "
     SELECT o.*, u.fullname, u.email, u.phone
     FROM orders o
     JOIN users u ON o.user_id = u.id
     WHERE o.id = ?
 ");
-$stmt->execute([$order_id]);
-$order = $stmt->fetch(PDO::FETCH_ASSOC);
+mysqli_stmt_bind_param($stmt, "i", $order_id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$order = mysqli_fetch_assoc($result);
 
 if (!$order) {
     header('Location: index.php');

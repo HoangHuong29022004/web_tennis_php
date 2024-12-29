@@ -11,18 +11,13 @@ if (empty($_SESSION['cart'])) {
 // Xử lý đặt hàng khi form được submit
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
-        // Bắt đầu transaction để đảm bảo tính toàn vẹn dữ liệu
-        $conn->beginTransaction();
+        mysqli_begin_transaction($conn);
 
-        // 1. Thêm thông tin người dùng vào bảng users
-        $stmt = $conn->prepare("INSERT INTO users (fullname, email, phone, address) VALUES (?, ?, ?, ?)");
-        $stmt->execute([
-            $_POST['fullname'],  // Họ tên từ form
-            $_POST['email'],     // Email từ form
-            $_POST['phone'],     // Số điện thoại từ form
-            $_POST['address']    // Địa chỉ từ form
-        ]);
-        $user_id = $conn->lastInsertId(); // Lấy ID của user vừa thêm
+        // 1. Thêm thông tin người dùng
+        $stmt = mysqli_prepare($conn, "INSERT INTO users (fullname, email, phone, address) VALUES (?, ?, ?, ?)");
+        mysqli_stmt_bind_param($stmt, "ssss", $_POST['fullname'], $_POST['email'], $_POST['phone'], $_POST['address']);
+        mysqli_stmt_execute($stmt);
+        $user_id = mysqli_insert_id($conn);
 
         // 2. Tính tổng tiền đơn hàng
         $total_amount = 0;
@@ -30,31 +25,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $total_amount += $item['price'] * $item['quantity'];
         }
 
-        // 3. Thêm đơn hàng vào bảng orders
-        $stmt = $conn->prepare("INSERT INTO orders (user_id, total_amount, shipping_address, phone) 
-                              VALUES (?, ?, ?, ?)");
-        $stmt->execute([
-            $user_id,
-            $total_amount,
-            $_POST['address'],
-            $_POST['phone']
-        ]);
-        $order_id = $conn->lastInsertId(); // Lấy ID của đơn hàng vừa thêm
+        // 3. Thêm đơn hàng
+        $stmt = mysqli_prepare($conn, "INSERT INTO orders (user_id, total_amount, shipping_address, phone) VALUES (?, ?, ?, ?)");
+        mysqli_stmt_bind_param($stmt, "idss", $user_id, $total_amount, $_POST['address'], $_POST['phone']);
+        mysqli_stmt_execute($stmt);
+        $order_id = mysqli_insert_id($conn);
 
-        // 4. Thêm chi tiết từng sản phẩm vào bảng order_details
-        $stmt = $conn->prepare("INSERT INTO order_details (order_id, product_id, quantity, price) 
-                              VALUES (?, ?, ?, ?)");
+        // 4. Thêm chi tiết đơn hàng
+        $stmt = mysqli_prepare($conn, "INSERT INTO order_details (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)");
         foreach ($_SESSION['cart'] as $product_id => $item) {
-            $stmt->execute([
-                $order_id,
-                $product_id,
-                $item['quantity'],
-                $item['price']
-            ]);
+            mysqli_stmt_bind_param($stmt, "iiid", $order_id, $product_id, $item['quantity'], $item['price']);
+            mysqli_stmt_execute($stmt);
         }
 
-        // Commit transaction nếu mọi thứ OK
-        $conn->commit();
+        mysqli_commit($conn);
         
         // Xóa giỏ hàng sau khi đặt hàng thành công
         unset($_SESSION['cart']);
@@ -64,8 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
 
     } catch (Exception $e) {
-        // Rollback nếu có lỗi xảy ra
-        $conn->rollBack();
+        mysqli_rollback($conn);
         $error = "Có lỗi xảy ra, vui lòng thử lại!";
     }
 }
